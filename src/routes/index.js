@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../middleware/upload");
-const { handleUpload } = require("../controllers/uploadController");
+const { handleUpload, handleDelete } = require("../controllers/uploadController");
 
 // Health check
 router.get("/health", (req, res) => {
@@ -14,5 +14,8 @@ router.get("/health", (req, res) => {
 
 // Image upload
 router.post("/upload", upload.single("image"), handleUpload);
+
+// Image delete
+router.delete("/uploads/:imageKitId", handleDelete);
 
 module.exports = router;

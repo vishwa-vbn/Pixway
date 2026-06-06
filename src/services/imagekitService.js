@@ -38,4 +38,20 @@ async function uploadImage(fileBuffer, fileName, applicationName, applicationId)
   };
 }
 
-module.exports = { uploadImage };
+/**
+ * Deletes an image from ImageKit.
+ * @param {string} imageKitId
+ * @returns {Object} Result of deletion
+ */
+async function deleteImage(imageKitId) {
+  try {
+    const result = await imagekit.deleteFile(imageKitId);
+    return result;
+  } catch (err) {
+    const error = new Error(err.message || "ImageKit delete failed");
+    error.code = "IMAGEKIT_ERROR";
+    throw error;
+  }
+}
+
+module.exports = { uploadImage, deleteImage };

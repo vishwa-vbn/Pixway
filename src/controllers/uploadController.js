@@ -1,4 +1,4 @@
-const { uploadImage } = require("../services/imagekitService");
+const { uploadImage, deleteImage } = require("../services/imagekitService");
 
 async function handleUpload(req, res, next) {
   try {
@@ -26,4 +26,25 @@ async function handleUpload(req, res, next) {
   }
 }
 
-module.exports = { handleUpload };
+async function handleDelete(req, res, next) {
+  try {
+    const { imageKitId } = req.params;
+    const { applicationName, applicationId } = req.body;
+
+    // Validate required fields
+    if (!applicationName || !applicationId || !imageKitId) {
+      const err = new Error("applicationName, applicationId, and imageKitId are required");
+      err.code = "MISSING_FIELDS";
+      err.status = 400;
+      return next(err);
+    }
+
+    await deleteImage(imageKitId);
+
+    res.status(200).json({ success: true, message: "Image deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { handleUpload, handleDelete };
